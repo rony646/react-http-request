@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios'
 
 import './NewPost.css';
 
@@ -6,10 +7,31 @@ class NewPost extends Component {
     state = {
         title: '',
         content: '',
-        author: 'Max'
+        author: 'Max',
+        postSent: false
     }
 
+    addPostHandler = () => {
+        const data = {
+            title: this.state.title,
+            body: this.state.content,
+            author: this.state.author
+        }
+
+        axios.post('https://jsonplaceholder.typicode.com/posts', data)
+            .then(response => {
+                console.log(response)
+                this.setState({postSent: true})
+            })
+    }
+
+    
+
     render () {
+        let postSentMsg = null
+        if(this.state.postSent) {
+            postSentMsg = <h2>Post sent sucessfully!</h2>
+        }
         return (
             <div className="NewPost">
                 <h1>Add a Post</h1>
@@ -21,8 +43,10 @@ class NewPost extends Component {
                 <select value={this.state.author} onChange={(event) => this.setState({author: event.target.value})}>
                     <option value="Max">Max</option>
                     <option value="Manu">Manu</option>
+                    <option value="Rony">Rony</option>
                 </select>
-                <button>Add Post</button>
+                <button onClick={this.addPostHandler}>Add Post</button>
+                {postSentMsg}
             </div>
         );
     }
