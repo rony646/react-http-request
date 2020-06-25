@@ -10,7 +10,8 @@ class Blog extends Component {
 
     state = {
         posts: [],
-        selectedPostId: null
+        selectedPostId: null,
+        error: false
     }
 
    componentDidMount() {
@@ -25,6 +26,9 @@ class Blog extends Component {
                     }
                 })
                 this.setState({posts: updatePosts});
+            }).catch(error => {
+                console.log(error)
+                this.setState({error: true})
             })
     }
 
@@ -34,14 +38,19 @@ class Blog extends Component {
 
 
     render () {
-        const posts = this.state.posts.map(item => {
-            return <Post 
-                key={item.id} 
-                title={item.title} 
-                author={item.author}
-                date={item.date}
-                clicked={() => this.selectIdHandler(item.id)}/>
-        })
+        let posts= null
+        if(!this.props.error) {
+            posts = this.state.posts.map(item => {
+                return <Post 
+                    key={item.id} 
+                    title={item.title} 
+                    author={item.author}
+                    date={item.date}
+                    clicked={() => this.selectIdHandler(item.id)}/>
+            })
+        }
+
+        console.log(posts, this.state.error)
         
         return (
             <div>
