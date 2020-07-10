@@ -22,6 +22,7 @@ class NewPost extends Component {
             .then(response => {
                 console.log(response)
                 this.setState({postSent: true})
+                this.props.history.replace('/posts')
             })
     }
 
